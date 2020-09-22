@@ -32,7 +32,20 @@ class ProfController extends Controller
             ->where('to', '>', $hour)
             ->get();
 
-        return response()->json($classes, 200);
+        
+        if(count($classes) === 0 || count($classes) === ""){
+            return response()->json([
+                'status'    => 0,
+                'message'   => 'Não ha professores disponiveis para esse horário',
+                'result'    => ''
+            ], 200);
+        }
+
+        return response()->json([
+            'status' => 1,
+            'message' => 'Sucesso',
+            'result' => $classes
+        ], 200);
     }
 
     public function store(Request $request, Response $response)
@@ -45,6 +58,7 @@ class ProfController extends Controller
            'bio'            => $request->bio,
            'avaliable'      => '10'
        ]);
+
 
        $aula = Aula::create([
            'subject'         => $request->subject,
@@ -81,6 +95,8 @@ class ProfController extends Controller
 
         return response()->json($total, 200);
     }
+
+    
 
 
 }
